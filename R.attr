@@ -1,0 +1,5 @@
+%__R_provides	%{_rpmconfigdir}/R-deps.R Provides
+%__R_requires	%{_rpmconfigdir}/R-deps.R Depends Imports
+%__R_suggests	%{_rpmconfigdir}/R-deps.R Suggests
+%__R_enhances	%{_rpmconfigdir}/R-deps.R Enhances
+%__R_path	^(%{_datadir}|%{_libdir})/R/library/[^/]+/DESCRIPTION$
