@@ -37,6 +37,20 @@ parse_deps <- function(deps) {
   res
 }
 
+# Print a dependency on the R-core package, specifying a version if one is in
+# the metadata, unless the version is a Subversion revision, which we don't
+# have.
+print_R_dep <- function(pkg_deps) {
+  R_deps <- na.omit(pkg_deps$R$version)
+  # Skip any versions that specify a Subversion revision.
+  R_deps <- R_deps[!grepl("r", R_deps, fixed = TRUE)]
+  if (length(R_deps) > 0) {
+    cat(paste("R-core", R_deps, sep = " "), sep = "\n")
+  } else {
+    cat("R-core\n")
+  }
+}
+
 # Print out a package dependency, using the standard name, and optionally a
 # version constraint if provided.
 print_package_dep <- function(pkg_dep) {
@@ -61,7 +75,13 @@ generate_package_deps <- function(path, types) {
     deps <- lapply(types, function(t) parse_deps(desc[[t]]))
     deps <- do.call(rbind, deps)
     pkg_deps <- split(deps, deps$package)
-    pkg_deps$R <- NULL  # Skip any R dependencies, which allow weird versioning.
+
+    if (any(types == "Depends")) {
+      # Always add R-core dependency.
+      print_R_dep(pkg_deps)
+    }
+    pkg_deps$R <- NULL
+
     lapply(pkg_deps, print_package_dep)
   }
 }
