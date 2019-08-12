@@ -37,6 +37,8 @@ parse_deps <- function(deps) {
   res
 }
 
+# Print out a package dependency, using the standard name, and optionally a
+# version constraint if provided.
 print_package_dep <- function(pkg_deps) {
   name <- paste0("R(", pkg_deps$package[1], ")", sep = "")
   versions <- na.omit(pkg_deps$version)
