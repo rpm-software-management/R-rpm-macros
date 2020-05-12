@@ -64,6 +64,13 @@ print_package_dep <- function(pkg_dep) {
   }
 }
 
+# Generate R(ABI) dependency from R major and R minor (but not R patch rev)
+print_abi_dep <- function() {
+   ABI_major <- R.version$major
+   ABI_minor <- sub("\\..*", "", R.version$minor)
+   cat("R(ABI) = ", ABI_major, ".", ABI_minor, "\n", sep = "")
+}
+
 # Given a path to a package DESCRIPTION file, and a list of dependency types,
 # print those out in standard RPM format.
 generate_package_deps <- function(path, types) {
@@ -79,6 +86,8 @@ generate_package_deps <- function(path, types) {
     if (any(types == "Depends")) {
       # Always add R-core dependency.
       print_R_dep(pkg_deps)
+      # Always add R(ABI) dependency.
+      print_abi_dep()
     }
     pkg_deps$R <- NULL
 
