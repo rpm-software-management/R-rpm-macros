@@ -19,6 +19,14 @@ str_trim <- function(x) {
   sub("^\\s+", "", sub("\\s+$", "", x))
 }
 
+# normalize_version ensures that version strings are consistent for rpm. R
+# treats both dash and dot equivalently, but rpm does not. Since the rpm
+# Version field will need to be dots-only anyway, we do the same here and
+# normalize to dots.
+normalize_version <- function(v) {
+  gsub("-", ".", v)
+}
+
 # parse_deps is from `desc`:R/deps.R, but without 'type', and some tweaks for
 # empty input and whitespace cleanup.
 parse_deps <- function(deps) {
@@ -60,7 +68,7 @@ print_package_dep <- function(pkg_dep) {
     # No versions specified.
     cat(name, "\n")
   } else {
-    cat(paste(name, versions, sep = " "), sep = "\n")
+    cat(paste(name, normalize_version(versions), sep = " "), sep = "\n")
   }
 }
 
@@ -77,7 +85,8 @@ generate_package_deps <- function(path, types) {
   pkgpath <- dirname(path)  # Drop DESCRIPTION; point to package path instead.
   desc <- packageDescription(basename(pkgpath), lib.loc = dirname(pkgpath))
   if (all(types == "Provides")) {
-    cat("R(", desc$Package, ") = ", desc$Version, "\n", sep = "")
+    cat("R(", desc$Package, ") = ", normalize_version(desc$Version), "\n",
+	sep = "")
   } else {
     deps <- lapply(types, function(t) parse_deps(desc[[t]]))
     deps <- do.call(rbind, deps)
