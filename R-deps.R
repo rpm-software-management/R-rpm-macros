@@ -85,8 +85,7 @@ generate_package_deps <- function(path, types) {
   pkgpath <- dirname(path)  # Drop DESCRIPTION; point to package path instead.
   desc <- packageDescription(basename(pkgpath), lib.loc = dirname(pkgpath))
   if (all(types == "Provides")) {
-    cat("R(", desc$Package, ") = ", normalize_version(desc$Version), "\n",
-	sep = "")
+    cat("R(", desc$Package, ") = ", normalize_version(desc$Version), "\n", sep = "")
   } else {
     deps <- lapply(types, function(t) parse_deps(desc[[t]]))
     deps <- do.call(rbind, deps)
