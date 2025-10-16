@@ -1,3 +1,3 @@
+%__R_path	    ^(%{_datadir}|%{_libdir})/R/library/[^/]+/DESCRIPTION$
 %__R_provides	%{_rpmconfigdir}/R-deps.R Provides
 %__R_requires	%{_rpmconfigdir}/R-deps.R Depends Imports
-%__R_path	^(%{_datadir}|%{_libdir})/R/library/[^/]+/DESCRIPTION$

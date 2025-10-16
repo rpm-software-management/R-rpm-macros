@@ -1,0 +1,71 @@
+# SPDX-License-Identifier: MIT
+
+# URL templates for standard repos
+%__cran_project_url_template https://cran.r-project.org/package=NAME
+%__cran_package_url_template %{__cran_project_url_template}&version=VERSION#/NAME_VERSION.EXT
+%__bioc_project_url_base     https://bioconductor.org/packages/release/bioc
+%__bioc_project_url_template %{__bioc_project_url_base}/html/NAME.html
+%__bioc_package_url_template %{__bioc_project_url_base}/src/contrib/NAME_VERSION.EXT
+
+# Default extension
+%__R_ext tar.gz
+
+# Try %R_name, then %name with "R-" stripped
+%__R_name %{lua:
+local src = rpm.expand("%R_name")
+if src == "%R_name" then
+    src = string.gsub(rpm.expand("%name"), "^R%-", "")
+end
+print(src)
+}
+
+# Compute metadata based on %R_repo, %R_name, %R_vers, and %R_comp
+# Also print R-devel as BuildRequires set noarch if %R_comp is 0 (default)
+#
+# - %R_name_rpm is defined as R-%__R_name
+# - %R_vers_rpm is defined as %R_vers with "-" replaced by "."
+# - %R_url is defined as the repo URL built from templates above
+# - %R_source is defined as the package URL built from templates above
+# - %_R_libdir is defined properly based on %R_comp
+%R_meta %{lua:
+    -- define R_name_rpm
+    local name = rpm.expand("%__R_name")
+    rpm.define("R_name_rpm R-" .. name)
+\
+    -- define R_vers_rpm
+    local version = rpm.expand("%R_vers")
+    if version == "%R_vers" then
+        version = rpm.expand("%version")
+    end
+    rpm.define("R_vers_rpm " .. string.gsub(version, "-", "."))
+\
+    -- define R_url
+    local repo = rpm.expand("%R_repo")
+    if repo == "%R_repo" then
+        repo = "cran"
+    end
+    local project_url = rpm.expand("%__" .. repo .. "_project_url_template")
+    project_url = string.gsub(project_url, "NAME", name)
+    rpm.define("R_url " .. project_url)
+\
+    -- define R_source
+    local ext = rpm.expand("%__R_ext")
+    local package_url = rpm.expand("%__" .. repo .. "_package_url_template")
+    package_url = string.gsub(package_url, "NAME", name)
+    package_url = string.gsub(package_url, "VERSION", version)
+    package_url = string.gsub(package_url, "EXT", ext)
+    rpm.define("R_source " .. package_url)
+\
+    -- define _R_libdir, print R-devel as BR and BuildArch if needed
+    local needs_compilation = rpm.expand("%R_comp")
+    if needs_compilation == "%R_comp" then
+        needs_compilation = 0
+    end
+    if needs_compilation == 0 then
+        rpm.define("_R_libdir  %{_datadir}/R/library")
+        print("BuildArch: noarch\\\n")
+    else
+        rpm.define("_R_libdir  %{_libdir}/R/library")
+    end
+    print("BuildRequires: R-devel\\\n")
+}
