@@ -16,6 +16,9 @@ mkdir -p %{buildroot}%{_R_libdir}
 builddate=$(date --utc --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" -R)
 %__R_cmd INSTALL --built-timestamp="$builddate" -l %{buildroot}%{_R_libdir} %{__R_name}
 rm -f %{__R_name}/src/*.{o,so} %{buildroot}%{_R_libdir}/R.css
+}
+
+%R_save_files %{expand:
 %__R_files -b "%{buildroot}" -p "%{_R_libdir}/%{__R_name}" > "%{R_files}"
 }
 
