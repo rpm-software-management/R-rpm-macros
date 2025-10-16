@@ -1,14 +1,20 @@
 # SPDX-License-Identifier: MIT
 
+# Scripts
 %__R_cmd %{_bindir}/R CMD
 %__R_deps %{_rpmconfigdir}/R-deps.R
 %__R_files %{_rpmconfigdir}/R-files.R
 
+# Packages used for running test suites
+%__R_whitelist testthat|tinytest|RUnit
+
+# Path to save files
 %_R_files_prefix %{name}-%{version}-%{release}.%{_arch}
 %R_files %{_builddir}/%{_R_files_prefix}-R-files
 
 %R_buildrequires %{expand:
 echo %{__R_name}/DESCRIPTION | %__R_deps LinkingTo Depends Imports
+echo %{__R_name}/DESCRIPTION | %__R_deps Suggests | grep -E "%{__R_whitelist}"
 }
 
 %R_install %{expand:
