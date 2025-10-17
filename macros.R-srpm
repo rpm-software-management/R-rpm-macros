@@ -12,60 +12,37 @@
 
 # Try %R_name, then %name with "R-" stripped
 %__R_name %{lua:
-local src = rpm.expand("%R_name")
-if src == "%R_name" then
-    src = string.gsub(rpm.expand("%name"), "^R%-", "")
-end
-print(src)
+    local name = rpm.expand("%R_name")
+    if name == "%R_name" then
+        name = string.gsub(rpm.expand("%name"), "^R%-", "")
+    end
+    print(name)
 }
 
-# Compute metadata based on %R_repo, %R_name, %R_vers, and %R_comp
-# Also print R-devel as BuildRequires set noarch if %R_comp is 0 (default)
-#
-# - %R_name_rpm is defined as R-%__R_name
-# - %R_vers_rpm is defined as %R_vers with "-" replaced by "."
-# - %R_url is defined as the repo URL built from templates above
-# - %R_source is defined as the package URL built from templates above
-# - %_R_libdir is defined properly based on %R_comp
-%R_meta %{lua:
-    -- define R_name_rpm
-    local name = rpm.expand("%__R_name")
-    rpm.define("R_name_rpm R-" .. name)
-\
-    -- define R_vers_rpm
+# Try %R_vers, then %version
+%__R_vers %{lua:
     local version = rpm.expand("%R_vers")
     if version == "%R_vers" then
         version = rpm.expand("%version")
     end
-    rpm.define("R_vers_rpm " .. string.gsub(version, "-", "."))
-\
-    -- define R_url
-    local repo = rpm.expand("%R_repo")
-    if repo == "%R_repo" then
-        repo = "cran"
-    end
-    local project_url = rpm.expand("%__" .. repo .. "_project_url_template")
-    project_url = string.gsub(project_url, "NAME", name)
-    rpm.define("R_url " .. project_url)
-\
-    -- define R_source
-    local ext = rpm.expand("%__R_ext")
-    local package_url = rpm.expand("%__" .. repo .. "_package_url_template")
-    package_url = string.gsub(package_url, "NAME", name)
-    package_url = string.gsub(package_url, "VERSION", version)
-    package_url = string.gsub(package_url, "EXT", ext)
-    rpm.define("R_source " .. package_url)
-\
-    -- define _R_libdir, print R-devel as BR and BuildArch if needed
-    local needs_compilation = rpm.expand("%R_comp")
-    if needs_compilation == "%R_comp" then
-        needs_compilation = 0
-    end
-    if needs_compilation == 0 then
-        rpm.define("_R_libdir  %{_datadir}/R/library")
-        print("BuildArch: noarch\\\n")
-    else
-        rpm.define("_R_libdir  %{_libdir}/R/library")
-    end
-    print("BuildRequires: R-devel\\\n")
+    print(version)
 }
+
+# Version normalization
+%R_vers_rpm %{lua:
+    local version = string.gsub(rpm.expand("%__R_vers"), "-", ".")
+    print(version)
+}
+
+# Macros for expanding URLs and sources
+%__R_urls() %{lua:
+    local url = rpm.expand("%__" .. rpm.expand("%1") .. "_" .. rpm.expand("%2") .. "_url_template")
+    url = string.gsub(url, "NAME", rpm.expand("%__R_name"))
+    url = string.gsub(url, "VERSION", rpm.expand("%__R_vers"))
+    url = string.gsub(url, "EXT", rpm.expand("%__R_ext"))
+    print(url)
+}
+%cran_url    %__R_urls cran project
+%bioc_url    %__R_urls bioc project
+%cran_source %__R_urls cran package
+%bioc_source %__R_urls bioc package

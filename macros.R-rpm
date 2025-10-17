@@ -12,6 +12,15 @@
 %_R_files_prefix %{name}-%{version}-%{release}.%{_arch}
 %R_files %{_builddir}/%{_R_files_prefix}-R-files
 
+# libdir defined based on buildarch
+%_R_libdir %{lua:
+    local rlibdir = rpm.expand("%{_libdir}")
+    if rpm.expand("%buildarch") == "noarch" then
+        rlibdir = rpm.expand("%{_datadir}")
+    end
+    print(rlibdir .. "/R/library")
+}
+
 %R_buildrequires %{expand:
 echo %{__R_name}/DESCRIPTION | %__R_deps LinkingTo Depends Imports
 echo %{__R_name}/DESCRIPTION | %__R_deps Suggests | grep -E "%{__R_whitelist}"
@@ -28,7 +37,7 @@ rm -f %{__R_name}/src/*.{o,so} %{buildroot}%{_R_libdir}/R.css
 %__R_files -b "%{buildroot}" -p "%{_R_libdir}/%{__R_name}" > "%{R_files}"
 }
 
-%R_check %{expand:
+%R_check() %{expand:
 export LANG=C.UTF-8
 export _R_CHECK_FORCE_SUGGESTS_=0
 %__R_cmd check --no-manual --ignore-vignettes %{__R_name} %{**}
