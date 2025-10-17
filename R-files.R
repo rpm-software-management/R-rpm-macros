@@ -3,7 +3,7 @@
 
 file_globs <- list(
   license = c("LICENSE*", "LICENCE*", "COPYING*", "NOTICE*", "AUTHORS*"),
-  doc = c("README*", "NEWS*", "ChangeLog*", "TODO*", "doc", "html")
+  doc = c("doc", "html", "README*", "NEWS*", "ChangeLog*", "TODO*", "announce", "bib")
 )
 
 args <- commandArgs(trailingOnly = TRUE)
