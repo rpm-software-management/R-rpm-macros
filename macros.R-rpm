@@ -12,8 +12,14 @@
 %_R_files_prefix %{name}-%{version}-%{release}.%{_arch}
 %R_files %{_builddir}/%{_R_files_prefix}-R-files
 
-# libdir defined based on NeedsCompilation field
-%_R_libdir %{expand:$([ "$(grep NeedsCompilation %{__R_name}/DESCRIPTION | cut -d" " -f2)" = "yes" ] && echo %{_libdir} || echo %{_datadir})/R/library}
+# libdir defined based on buildarch
+%_R_libdir %{lua:
+    local rlibdir = rpm.expand("%{_libdir}")
+    if rpm.expand("%buildarch") == "noarch" then
+        rlibdir = rpm.expand("%{_datadir}")
+    end
+    print(rlibdir .. "/R/library")
+}
 
 %R_buildrequires %{expand:
 echo %{__R_name}/DESCRIPTION | %__R_deps LinkingTo Depends Imports
@@ -21,15 +27,14 @@ echo %{__R_name}/DESCRIPTION | %__R_deps Suggests | grep -E "%{__R_whitelist}"
 }
 
 %R_install %{expand:
-_R_LIBDIR=%{_R_libdir}
-mkdir -p %{buildroot}${_R_LIBDIR}
+mkdir -p %{buildroot}%{_R_libdir}
 builddate=$(date --utc --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" -R)
-%__R_cmd INSTALL --built-timestamp="$builddate" -l %{buildroot}${_R_LIBDIR} %{__R_name}
-rm -f %{__R_name}/src/*.{o,so} %{buildroot}${_R_LIBDIR}/R.css
+%__R_cmd INSTALL --built-timestamp="$builddate" -l %{buildroot}%{_R_libdir} %{__R_name}
+rm -f %{__R_name}/src/*.{o,so} %{buildroot}%{_R_libdir}/R.css
 }
 
 %R_save_files %{expand:
-%__R_files -b "%{buildroot}" -p "${_R_LIBDIR}/%{__R_name}" > "%{R_files}"
+%__R_files -b "%{buildroot}" -p "%{_R_libdir}/%{__R_name}" > "%{R_files}"
 }
 
 %R_check() %{expand:
