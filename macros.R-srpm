@@ -10,27 +10,26 @@
 # Default extension
 %__R_ext tar.gz
 
-# Try %R_name, then %name with "R-" stripped
+# %name with "R-" stripped
 %__R_name %{lua:
-    local name = rpm.expand("%R_name")
-    if name == "%R_name" then
-        name = string.gsub(rpm.expand("%name"), "^R%-", "")
-    end
+    local name = string.gsub(rpm.expand("%name"), "^R%-", "")
     print(name)
 }
 
-# Try %R_vers, then %version
-%__R_vers %{lua:
-    local version = rpm.expand("%R_vers")
-    if version == "%R_vers" then
+# Try %__R_upstream_version, then %version
+%__R_version %{lua:
+    local version = rpm.expand("%__R_upstream_version")
+    if version == "%__R_upstream_version" then
         version = rpm.expand("%version")
     end
     print(version)
 }
 
-# Version normalization
-%R_vers_rpm %{lua:
-    local version = string.gsub(rpm.expand("%__R_vers"), "-", ".")
+# Version normalization, defines %__R_upstream_version
+%R_rpm_version() %{lua:
+    local version = rpm.expand("%1")
+    rpm.define("__R_upstream_version " .. version)
+    version = string.gsub(version, "-", ".")
     print(version)
 }
 
@@ -38,7 +37,7 @@
 %__R_urls() %{lua:
     local url = rpm.expand("%__" .. rpm.expand("%1") .. "_" .. rpm.expand("%2") .. "_url_template")
     url = string.gsub(url, "NAME", rpm.expand("%__R_name"))
-    url = string.gsub(url, "VERSION", rpm.expand("%__R_vers"))
+    url = string.gsub(url, "VERSION", rpm.expand("%__R_version"))
     url = string.gsub(url, "EXT", rpm.expand("%__R_ext"))
     print(url)
 }
