@@ -12,10 +12,10 @@
 %_R_files_prefix %{name}-%{version}-%{release}.%{_arch}
 %R_files %{_builddir}/%{_R_files_prefix}-R-files
 
-# libdir defined based on buildarch
+# libdir defined based on %{_target_cpu}
 %_R_libdir %{lua:
     local rlibdir = rpm.expand("%{_libdir}")
-    if rpm.expand("%buildarch") == "noarch" then
+    if rpm.expand("%{_target_cpu}") == "noarch" then
         rlibdir = rpm.expand("%{_datadir}")
     end
     print(rlibdir .. "/R/library")
