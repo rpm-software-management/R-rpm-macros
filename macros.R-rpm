@@ -21,6 +21,20 @@
     print(rlibdir .. "/R/library")
 }
 
+# either noarch or a .so is found, not both
+%_R_libdir_check %{expand:
+IS_NOARCH=1; [ "%{_target_cpu}" = "noarch" ] || IS_NOARCH=0
+LIB_FOUND=1; [ -f %{buildroot}%{_R_libdir}/%{__R_name}/libs/%{__R_name}.so ] || LIB_FOUND=0
+case $(($IS_NOARCH + $LIB_FOUND)) in
+  0)
+    echo "No libs/%{__R_name}.so found in archful package, did you mean BuildArch: noarch?"
+    exit 1 ;;
+  2)
+    echo "File libs/%{__R_name}.so found in noarch package"
+    exit 1 ;;
+esac
+}
+
 %R_buildrequires %{expand:
 echo %{__R_name}/DESCRIPTION | %__R_deps LinkingTo Depends Imports
 echo %{__R_name}/DESCRIPTION | %__R_deps Suggests | grep -E "%{__R_whitelist}"
@@ -31,6 +45,7 @@ mkdir -p %{buildroot}%{_R_libdir}
 builddate=$(date --utc --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" -R)
 %__R_cmd INSTALL --built-timestamp="$builddate" -l %{buildroot}%{_R_libdir} %{__R_name}
 rm -f %{__R_name}/src/*.{o,so} %{buildroot}%{_R_libdir}/R.css
+%_R_libdir_check
 }
 
 %R_save_files %{expand:
