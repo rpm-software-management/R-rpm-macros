@@ -1,0 +1,47 @@
+# SPDX-License-Identifier: MIT
+
+# URL templates for standard repos
+%__cran_project_url_template https://cran.r-project.org/package=NAME
+%__cran_package_url_template %{__cran_project_url_template}&version=VERSION#/NAME_VERSION.EXT
+%__bioc_project_url_base     https://bioconductor.org/packages/release/bioc
+%__bioc_project_url_template %{__bioc_project_url_base}/html/NAME.html
+%__bioc_package_url_template %{__bioc_project_url_base}/src/contrib/NAME_VERSION.EXT
+
+# Default extension
+%__R_ext tar.gz
+
+# %name with "R-" stripped
+%__R_name %{lua:
+    local name = string.gsub(rpm.expand("%name"), "^R%-", "")
+    print(name)
+}
+
+# Try %__R_upstream_version, then %version
+%__R_version %{lua:
+    local version = rpm.expand("%__R_upstream_version")
+    if version == "%__R_upstream_version" then
+        version = rpm.expand("%version")
+    end
+    print(version)
+}
+
+# Version normalization, defines %__R_upstream_version
+%R_rpm_version() %{lua:
+    local version = rpm.expand("%1")
+    rpm.define("__R_upstream_version " .. version)
+    version = string.gsub(version, "-", ".")
+    print(version)
+}
+
+# Macros for expanding URLs and sources
+%__R_urls() %{lua:
+    local url = rpm.expand("%__" .. rpm.expand("%1") .. "_" .. rpm.expand("%2") .. "_url_template")
+    url = string.gsub(url, "NAME", rpm.expand("%__R_name"))
+    url = string.gsub(url, "VERSION", rpm.expand("%__R_version"))
+    url = string.gsub(url, "EXT", rpm.expand("%__R_ext"))
+    print(url)
+}
+%cran_url    %__R_urls cran project
+%bioc_url    %__R_urls bioc project
+%cran_source %__R_urls cran package
+%bioc_source %__R_urls bioc package

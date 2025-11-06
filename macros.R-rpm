@@ -1,0 +1,59 @@
+# SPDX-License-Identifier: MIT
+
+# Scripts
+%__R_cmd %{_bindir}/R CMD
+%__R_deps %{_rpmconfigdir}/R-deps.R
+%__R_files %{_rpmconfigdir}/R-files.R
+
+# Packages used for running test suites
+%__R_whitelist testthat|tinytest|RUnit
+
+# Path to save files
+%_R_files_prefix %{name}-%{version}-%{release}.%{_arch}
+%R_files %{_builddir}/%{_R_files_prefix}-R-files
+
+# libdir defined based on %{_target_cpu}
+%_R_libdir %{lua:
+    local rlibdir = rpm.expand("%{_libdir}")
+    if rpm.expand("%{_target_cpu}") == "noarch" then
+        rlibdir = rpm.expand("%{_datadir}")
+    end
+    print(rlibdir .. "/R/library")
+}
+
+# either noarch or a .so is found, not both
+%_R_libdir_check %{expand:
+IS_NOARCH=1; [ "%{_target_cpu}" = "noarch" ] || IS_NOARCH=0
+LIB_FOUND=1; [ -f %{buildroot}%{_R_libdir}/%{__R_name}/libs/%{__R_name}.so ] || LIB_FOUND=0
+case $(($IS_NOARCH + $LIB_FOUND)) in
+  0)
+    echo "No libs/%{__R_name}.so found in archful package, did you mean BuildArch: noarch?"
+    exit 1 ;;
+  2)
+    echo "File libs/%{__R_name}.so found in noarch package"
+    exit 1 ;;
+esac
+}
+
+%R_buildrequires %{expand:
+echo %{__R_name}/DESCRIPTION | %__R_deps LinkingTo Depends Imports
+echo %{__R_name}/DESCRIPTION | %__R_deps Suggests | grep -E "%{__R_whitelist}"
+}
+
+%R_install %{expand:
+mkdir -p %{buildroot}%{_R_libdir}
+builddate=$(date --utc --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" -R)
+%__R_cmd INSTALL --built-timestamp="$builddate" -l %{buildroot}%{_R_libdir} %{__R_name}
+rm -f %{__R_name}/src/*.{o,so} %{buildroot}%{_R_libdir}/R.css
+%_R_libdir_check
+}
+
+%R_save_files %{expand:
+%__R_files -b "%{buildroot}" -p "%{_R_libdir}/%{__R_name}" > "%{R_files}"
+}
+
+%R_check() %{expand:
+export LANG=C.UTF-8
+export _R_CHECK_FORCE_SUGGESTS_=0
+%__R_cmd check --no-manual --ignore-vignettes %{__R_name} %{**}
+}

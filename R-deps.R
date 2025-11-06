@@ -1,8 +1,7 @@
 #!/usr/bin/Rscript
+# SPDX-License-Identifier: MIT
 
 # This is an RPM generator script for R dependencies.
-#
-# This file is under the MIT license.
 #
 # Parts of this file were taken from the `desc` package, also under the MIT
 # license, Copyright 2015-2018, Gábor Csárdi, RStudio Inc
@@ -85,14 +84,13 @@ generate_package_deps <- function(path, types) {
   pkgpath <- dirname(path)  # Drop DESCRIPTION; point to package path instead.
   desc <- packageDescription(basename(pkgpath), lib.loc = dirname(pkgpath))
   if (all(types == "Provides")) {
-    cat("R(", desc$Package, ") = ", normalize_version(desc$Version), "\n",
-	sep = "")
+    cat("R(", desc$Package, ") = ", normalize_version(desc$Version), "\n", sep = "")
   } else {
     deps <- lapply(types, function(t) parse_deps(desc[[t]]))
     deps <- do.call(rbind, deps)
     pkg_deps <- split(deps, deps$package)
 
-    if (any(types == "Depends")) {
+    if ("Depends" %in% types && !"LinkingTo" %in% types) {
       # Always add R-core dependency.
       print_R_dep(pkg_deps)
       # Always add R(ABI) dependency.
