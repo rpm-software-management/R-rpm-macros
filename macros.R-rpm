@@ -37,7 +37,7 @@ esac
 
 %R_buildrequires %{expand:
 echo %{__R_name}/DESCRIPTION | %__R_deps LinkingTo Depends Imports
-echo %{__R_name}/DESCRIPTION | %__R_deps Suggests | grep -E "%{__R_whitelist}"
+echo %{__R_name}/DESCRIPTION | %__R_deps Suggests | grep -E "%{__R_whitelist}" || true
 }
 
 %R_install %{expand:
