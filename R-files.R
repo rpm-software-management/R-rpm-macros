@@ -3,7 +3,8 @@
 
 file_globs <- list(
   license = c("LICENSE*", "LICENCE*", "COPYING*", "NOTICE*", "AUTHORS*"),
-  doc = c("doc", "html", "README*", "NEWS*", "ChangeLog*", "TODO*", "announce", "bib")
+  doc = c("doc", "html", "README*", "NEWS*", "ChangeLog*", "TODO*", "announce", "bib"),
+  dir = "po"
 )
 
 args <- commandArgs(trailingOnly = TRUE)
@@ -28,4 +29,10 @@ for (i in seq_along(pkg_files)) for (file in pkg_files[[i]]) {
   type <- names(pkg_files)[i]
   type <- if (nchar(type)) paste0("%", type, " ") else NULL
   cat(paste0(type, file.path(pkg_path, file)), fill = TRUE)
+}
+
+lng_files <- list.files(file.path(buildroot, pkg_path, "po"))
+for (file in lng_files) {
+  type <- paste0("%lang(", sub("@.*", "", file), ") ")
+  cat(paste0(type, file.path(pkg_path, "po", file)), fill = TRUE)
 }
