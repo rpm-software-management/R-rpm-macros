@@ -3,7 +3,7 @@
 # URL templates for standard repos
 %__cran_project_url_template https://cran.r-project.org/package=NAME
 %__cran_package_url_template %{__cran_project_url_template}&version=VERSION#/NAME_VERSION.EXT
-%__bioc_project_url_base     https://bioconductor.org/packages/release/bioc
+%__bioc_project_url_base     https://bioconductor.org/packages/release/SECTION
 %__bioc_project_url_template %{__bioc_project_url_base}/html/NAME.html
 %__bioc_package_url_template %{__bioc_project_url_base}/src/contrib/NAME_VERSION.EXT
 
@@ -36,12 +36,18 @@
 # Macros for expanding URLs and sources
 %__R_urls() %{lua:
     local url = rpm.expand("%__" .. rpm.expand("%1") .. "_" .. rpm.expand("%2") .. "_url_template")
+    local section = rpm.expand("%3")
     url = string.gsub(url, "NAME", rpm.expand("%__R_name"))
     url = string.gsub(url, "VERSION", rpm.expand("%__R_version"))
     url = string.gsub(url, "EXT", rpm.expand("%__R_ext"))
+    if section == "%1" then
+        url = string.gsub(url, "SECTION", "bioc")
+    else
+        url = string.gsub(url, "SECTION", section)
+    end
     print(url)
 }
-%cran_url    %__R_urls cran project
-%bioc_url    %__R_urls bioc project
-%cran_source %__R_urls cran package
-%bioc_source %__R_urls bioc package
+%cran_url       %__R_urls cran project
+%bioc_url()     %__R_urls bioc project %1
+%cran_source    %__R_urls cran package
+%bioc_source()  %__R_urls bioc package %1
