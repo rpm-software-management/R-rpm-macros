@@ -43,8 +43,8 @@ echo %{__R_name}/DESCRIPTION | %__R_deps Suggests | grep -E "%{__R_whitelist}" |
 %R_install() %{expand:
 mkdir -p %{buildroot}%{_R_libdir}
 builddate=$(date --utc --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" -R)
-%__R_cmd INSTALL --built-timestamp="$builddate" %{**} \
-    -l %{buildroot}%{_R_libdir} %{__R_name} 2>&1 | tee install.log
+( set -o pipefail && %__R_cmd INSTALL --built-timestamp="$builddate" %{**} \
+    -l %{buildroot}%{_R_libdir} %{__R_name} 2>&1 | tee install.log )
 rm -f %{__R_name}/src/*.{o,so} %{buildroot}%{_R_libdir}/R.css
 %_R_libdir_check
 }
