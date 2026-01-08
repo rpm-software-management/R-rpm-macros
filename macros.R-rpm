@@ -6,7 +6,7 @@
 %__R_files %{_rpmconfigdir}/R-files.R
 
 # Packages used for running test suites
-%__R_whitelist testthat|tinytest|RUnit
+%__R_whitelist testthat|tinytest|RUnit|testit
 
 # Path to save files
 %_R_files_prefix %{name}-%{version}-%{release}.%{_arch}
