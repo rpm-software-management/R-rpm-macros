@@ -24,7 +24,7 @@
 # either noarch or a .so is found, not both
 %_R_libdir_check %{expand:
 IS_NOARCH=1; [ "%{_target_cpu}" = "noarch" ] || IS_NOARCH=0
-LIB_FOUND=1; find . -name "%{buildroot}%{_R_libdir}/%{__R_name}/libs/*.so" | grep -q '^' || LIB_FOUND=0
+LIB_FOUND=1; find %{buildroot}%{_R_libdir}/%{__R_name}/libs -name "*.so" | grep -q '^' || LIB_FOUND=0
 case $(($IS_NOARCH + $LIB_FOUND)) in
   0)
     echo "No libs/%{__R_name}.so found in archful package, did you mean BuildArch: noarch?"
