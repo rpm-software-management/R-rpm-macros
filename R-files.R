@@ -2,9 +2,9 @@
 # SPDX-License-Identifier: MIT
 
 file_patterns <- list(
-  license = c("^license*", "^licence*", "^copying*", "^notice*", "^authors*"),
-  doc = c("^doc$", "^html$", "^readme*", "^news*", "^changelog*", "^todo*",
-          "^announce*", "^bib$"),
+  license = c("^license.*", "^licence.*", "^copying.*", "^notice.*", "^authors.*"),
+  doc = c("^doc$", "^html$", "^readme.*", "^news.*", "^changelog.*", "^todo.*",
+          "^announce.*", "^bib$"),
   dir = "^po$"
 )
 
