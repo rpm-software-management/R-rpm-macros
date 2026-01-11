@@ -48,8 +48,8 @@ rm -f %{__R_name}/src/*.{o,so} %{buildroot}%{_R_libdir}/R.css
 %_R_libdir_check
 }
 
-%R_save_files %{expand:
-%__R_files -b "%{buildroot}" -p "%{_R_libdir}/%{__R_name}" > "%{R_files}"
+%R_save_files() %{expand:
+%__R_files -b "%{buildroot}" -p "%{?1}%{!?1:%{_R_libdir}/%{__R_name}}" > "%{?2}%{!?2:%{R_files}}"
 }
 
 %R_check() %{expand:
