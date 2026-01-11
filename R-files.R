@@ -1,10 +1,11 @@
 #!/usr/bin/Rscript
 # SPDX-License-Identifier: MIT
 
-file_globs <- list(
-  license = c("LICENSE*", "LICENCE*", "COPYING*", "NOTICE*", "AUTHORS*"),
-  doc = c("doc", "html", "README*", "NEWS*", "ChangeLog*", "TODO*", "announce", "bib"),
-  dir = "po"
+file_patterns <- list(
+  license = c("^license.*", "^licence.*", "^copying.*", "^notice.*", "^authors.*"),
+  doc = c("^doc$", "^html$", "^readme.*", "^news.*", "^changelog.*", "^todo.*",
+          "^announce.*", "^bib$"),
+  dir = "^po$"
 )
 
 args <- commandArgs(trailingOnly = TRUE)
@@ -19,8 +20,8 @@ buildroot <- args[which(args == "-b") + 1]
 pkg_path <- args[which(args == "-p") + 1]
 
 all_files <- list.files(file.path(buildroot, pkg_path))
-pkg_files <- lapply(file_globs, sapply, function(glob) 
-  list.files(file.path(buildroot, pkg_path), pattern = glob)) |>
+pkg_files <- lapply(file_patterns, sapply, function(pat)
+  list.files(file.path(buildroot, pkg_path), pattern=pat, ignore.case=TRUE)) |>
   lapply(unlist, use.names = FALSE)
 pkg_files[[length(pkg_files)+1]] <- setdiff(all_files, unlist(pkg_files))
 
