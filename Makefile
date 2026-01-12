@@ -10,3 +10,8 @@ install:
 	mkdir -p $(DESTDIR)$(PREFIX)/lib/rpm/macros.d
 	$(INSTALL) -m0644 macros.R-* $(DESTDIR)$(PREFIX)/lib/rpm/macros.d
 	$(INSTALL) -m0755 R-*.R $(DESTDIR)$(PREFIX)/lib/rpm/
+
+test:
+	tests/test.sh
+
+.PHONY: all install test

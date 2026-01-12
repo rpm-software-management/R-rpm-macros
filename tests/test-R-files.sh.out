@@ -1,0 +1,49 @@
+%dir /tests/anRpackage
+%license /tests/anRpackage/LICENCE
+%license /tests/anRpackage/COPYRIGHTS
+%license /tests/anRpackage/COPYRIGHTS.modreg
+%doc /tests/anRpackage/doc
+%doc /tests/anRpackage/html
+%doc /tests/anRpackage/NEWS
+%doc /tests/anRpackage/NEWS.md
+%doc /tests/anRpackage/NEWS.Rd
+%dir /tests/anRpackage/po
+/tests/anRpackage/afm
+/tests/anRpackage/bd.q
+/tests/anRpackage/CITATION
+/tests/anRpackage/data
+/tests/anRpackage/demo
+/tests/anRpackage/DESCRIPTION
+/tests/anRpackage/enc
+/tests/anRpackage/exec
+/tests/anRpackage/external
+/tests/anRpackage/files
+/tests/anRpackage/fonts
+/tests/anRpackage/help
+/tests/anRpackage/icc
+/tests/anRpackage/iconvlist
+/tests/anRpackage/include
+/tests/anRpackage/INDEX
+/tests/anRpackage/libs
+/tests/anRpackage/Meta
+/tests/anRpackage/misc
+/tests/anRpackage/mlbook
+/tests/anRpackage/NAMESPACE
+/tests/anRpackage/PP.files
+/tests/anRpackage/ppdata
+/tests/anRpackage/R
+/tests/anRpackage/scripts
+/tests/anRpackage/SOURCES.ts
+/tests/anRpackage/Sweave
+/tests/anRpackage/test-tools-1.R
+/tests/anRpackage/test-tools-Matrix.R
+/tests/anRpackage/test-tools.R
+/tests/anRpackage/wre.txt
+%lang(de) /tests/anRpackage/po/de
+%lang(en) /tests/anRpackage/po/en@quot
+%lang(fr) /tests/anRpackage/po/fr
+%lang(it) /tests/anRpackage/po/it
+%lang(ko) /tests/anRpackage/po/ko
+%lang(lt) /tests/anRpackage/po/lt
+%lang(pl) /tests/anRpackage/po/pl
+%lang(ru) /tests/anRpackage/po/ru

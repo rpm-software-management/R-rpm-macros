@@ -1,0 +1,100 @@
+# LinkingTo
+R(Rcpp) 
+R(RcppCCTZ) >= 0.2.9
+R(RcppDate) 
+
+# Depends
+R-core >= 4.1.0
+R(ABI) = 4.5
+R(errors) >= 0.4.0
+R(units) >= 0.8.0
+
+# Imports
+R(brio) >= 1.1.5
+R(callr) >= 3.7.6
+R(cli) >= 3.6.5
+R(desc) >= 1.4.3
+R(evaluate) >= 1.0.4
+R(jsonlite) >= 2.0.0
+R(lifecycle) >= 1.0.4
+R(magrittr) >= 2.0.3
+R(methods) 
+R(pkgload) >= 1.4.0
+R(praise) >= 1.0.0
+R(processx) >= 3.8.6
+R(ps) >= 1.9.1
+R(R6) >= 2.6.1
+R(rlang) >= 1.1.6
+R(utils) 
+R(waldo) >= 0.6.2
+R(withr) >= 3.0.2
+
+# LinkingTo Depends Imports
+R(brio) >= 1.1.5
+R(callr) >= 3.7.6
+R(cli) >= 3.6.5
+R(desc) >= 1.4.3
+R(errors) >= 0.4.0
+R(evaluate) >= 1.0.4
+R(jsonlite) >= 2.0.0
+R(lifecycle) >= 1.0.4
+R(magrittr) >= 2.0.3
+R(methods) 
+R(pkgload) >= 1.4.0
+R(praise) >= 1.0.0
+R(processx) >= 3.8.6
+R(ps) >= 1.9.1
+R(R6) >= 2.6.1
+R(Rcpp) 
+R(RcppCCTZ) >= 0.2.9
+R(RcppDate) 
+R(rlang) >= 1.1.6
+R(units) >= 0.8.0
+R(utils) 
+R(waldo) >= 0.6.2
+R(withr) >= 3.0.2
+
+# Depends Imports
+R-core >= 4.1.0
+R(ABI) = 4.5
+R(brio) >= 1.1.5
+R(callr) >= 3.7.6
+R(cli) >= 3.6.5
+R(desc) >= 1.4.3
+R(errors) >= 0.4.0
+R(evaluate) >= 1.0.4
+R(jsonlite) >= 2.0.0
+R(lifecycle) >= 1.0.4
+R(magrittr) >= 2.0.3
+R(methods) 
+R(pkgload) >= 1.4.0
+R(praise) >= 1.0.0
+R(processx) >= 3.8.6
+R(ps) >= 1.9.1
+R(R6) >= 2.6.1
+R(rlang) >= 1.1.6
+R(units) >= 0.8.0
+R(utils) 
+R(waldo) >= 0.6.2
+R(withr) >= 3.0.2
+
+# Suggests
+R(covr) 
+R(curl) >= 0.9.5
+R(diffviewer) >= 0.1.0
+R(digest) >= 0.6.33
+R(gh) 
+R(knitr) 
+R(otel) 
+R(otelsdk) 
+R(rmarkdown) 
+R(rstudioapi) 
+R(S7) 
+R(shiny) 
+R(usethis) 
+R(vctrs) >= 0.1.0
+R(xml2) 
+
+# Provides
+R(anRpackage) = 0.1.0
+
