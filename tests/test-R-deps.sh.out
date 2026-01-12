@@ -2,11 +2,13 @@
 R(Rcpp) 
 R(RcppCCTZ) >= 0.2.9
 R(RcppDate) 
+
 # Depends
 R-core >= 4.1.0
 R(ABI) = 4.5
 R(errors) >= 0.4.0
 R(units) >= 0.8.0
+
 # Imports
 R(brio) >= 1.1.5
 R(callr) >= 3.7.6
@@ -26,6 +28,7 @@ R(rlang) >= 1.1.6
 R(utils) 
 R(waldo) >= 0.6.2
 R(withr) >= 3.0.2
+
 # LinkingTo Depends Imports
 R(brio) >= 1.1.5
 R(callr) >= 3.7.6
@@ -50,6 +53,7 @@ R(units) >= 0.8.0
 R(utils) 
 R(waldo) >= 0.6.2
 R(withr) >= 3.0.2
+
 # Depends Imports
 R-core >= 4.1.0
 R(ABI) = 4.5
@@ -73,6 +77,7 @@ R(units) >= 0.8.0
 R(utils) 
 R(waldo) >= 0.6.2
 R(withr) >= 3.0.2
+
 # Suggests
 R(covr) 
 R(curl) >= 0.9.5
@@ -89,5 +94,7 @@ R(shiny)
 R(usethis) 
 R(vctrs) >= 0.1.0
 R(xml2) 
+
 # Provides
 R(anRpackage) = 0.1.0
+
