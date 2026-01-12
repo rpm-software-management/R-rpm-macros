@@ -2,6 +2,7 @@
 
 set -uo pipefail
 cd $(dirname $0)
+export LANG=C.UTF-8
 
 for file in test-*.sh; do
     echo -n "Running $file... "
