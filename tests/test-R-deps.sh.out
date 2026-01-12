@@ -38,3 +38,4 @@ R(shiny)
 R(usethis) 
 R(vctrs) >= 0.1.0
 R(xml2) 
+R(anRpackage) = 0.1.0
