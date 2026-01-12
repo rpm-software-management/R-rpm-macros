@@ -1,0 +1,40 @@
+# %__R_ext
+tar.gz
+tar.gz
+
+# %__R_name
+anRpackage
+anRpackage
+
+# %__R_version
+1.2.3
+1.2.3
+
+# %_R_libdir
+/usr/lib64/R/library
+/usr/share/R/library
+
+# %cran_url
+https://cran.r-project.org/package=anRpackage
+https://cran.r-project.org/package=anRpackage
+
+# %cran_source
+https://cran.r-project.org/package=anRpackage&version=1.2.3#/anRpackage_1.2.3.tar.gz
+https://cran.r-project.org/package=anRpackage&version=1.2.3#/anRpackage_1.2.3.tar.gz
+
+# %bioc_url
+https://bioconductor.org/packages/release/bioc/html/anRpackage.html
+https://bioconductor.org/packages/release/bioc/html/anRpackage.html
+
+# %bioc_source
+https://bioconductor.org/packages/release/bioc/src/contrib/anRpackage_1.2.3.tar.gz
+https://bioconductor.org/packages/release/bioc/src/contrib/anRpackage_1.2.3.tar.gz
+
+# %bioc_url data/annotation
+https://bioconductor.org/packages/release/data/annotation/html/anRpackage.html
+https://bioconductor.org/packages/release/data/annotation/html/anRpackage.html
+
+# %bioc_source data/annotation
+https://bioconductor.org/packages/release/data/annotation/src/contrib/anRpackage_1.2.3.tar.gz
+https://bioconductor.org/packages/release/data/annotation/src/contrib/anRpackage_1.2.3.tar.gz
+
