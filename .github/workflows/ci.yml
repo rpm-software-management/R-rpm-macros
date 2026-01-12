@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: dnf install -y make R-core R-rpm-macros R2spec && mkdir -p ~/.cache
+        run: dnf install -y make R-core spectool mock
 
       - name: Run tests
         run: make test
