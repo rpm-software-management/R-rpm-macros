@@ -5,8 +5,8 @@ fi
 
 cd specs
 for spec in *.spec; do
-    spectool -g $spec
-    mock --rebuild --spec $spec --sources *.tar.gz \
+    spectool -g $spec > /dev/null
+    mock -q --rebuild --spec $spec --sources *.tar.gz \
         -r fedora-rawhide-x86_64 --resultdir tmp > /dev/null
     rm -f *.tar.gz tmp/*debug*.rpm tmp/*.src.rpm
     for rpm in tmp/*.rpm; do
