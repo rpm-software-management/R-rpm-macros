@@ -10,28 +10,26 @@
 # Default extension
 %__R_ext tar.gz
 
-# %name with "R-" stripped
-%__R_name %{lua:
-    local name = string.gsub(rpm.expand("%name"), "^R%-", "")
-    print(name)
+# RPM 4.16 (EL9) does not provide a built-in %%gsub macro; remove this
+# workaround once support for this platform is no longer required.
+# See also: https://github.com/rpm-software-management/mock/pull/1706
+%_r_internal_gsub() %{lua:
+    local s = rpm.expand("%{?1:%1}")
+    local p = rpm.expand("%{?2:%2}")
+    local r = rpm.expand("%{?3:%3}")
+    local result = string.gsub(s, p, r)
+    print(result)
 }
+%r_gsub() %{?gsub:%gsub %{**}}%{?!gsub:%_r_internal_gsub %{**}}
+
+# %name with "R-" stripped
+%__R_name %r_gsub %{name} ^R[-] %{quote:}
 
 # Try %__R_upstream_version, then %version
-%__R_version %{lua:
-    local version = rpm.expand("%__R_upstream_version")
-    if version == "%__R_upstream_version" then
-        version = rpm.expand("%version")
-    end
-    print(version)
-}
+%__R_version %{?__R_upstream_version}%{!?__R_upstream_version:%version}
 
 # Version normalization, defines %__R_upstream_version
-%R_rpm_version() %{lua:
-    local version = rpm.expand("%1")
-    rpm.define("__R_upstream_version " .. version)
-    version = string.gsub(version, "-", ".")
-    print(version)
-}
+%R_rpm_version() %{quote:%global __R_upstream_version %1}%{r_gsub %1 - .}
 
 # Macros for expanding URLs and sources
 %__R_urls() %{lua:
