@@ -1,4 +1,3 @@
-RPM tmp/R-errors-0.4.4-1.fc44.noarch.rpm generated:
 /usr/share/R/library/errors
 /usr/share/R/library/errors/CITATION
 /usr/share/R/library/errors/DESCRIPTION
@@ -101,10 +100,6 @@ RPM tmp/R-errors-0.4.4-1.fc44.noarch.rpm generated:
 /usr/share/R/library/errors/html/rep.errors.html
 /usr/share/R/library/errors/html/t.errors.html
 
-RPM tmp/R-units-1.0.0-1.fc44.x86_64.rpm generated:
-/usr/lib/.build-id
-/usr/lib/.build-id/d9
-/usr/lib/.build-id/d9/20720aa2dae59b0f90cadf814220ca83b77644
 /usr/lib64/R/library/units
 /usr/lib64/R/library/units/CITATION
 /usr/lib64/R/library/units/DESCRIPTION

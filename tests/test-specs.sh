@@ -10,8 +10,7 @@ for spec in *.spec; do
         -r fedora-rawhide-x86_64 --resultdir tmp
     rm -f *.tar.gz tmp/*debug*.rpm tmp/*.src.rpm
     for rpm in tmp/*.rpm; do
-        echo "RPM $rpm generated:"
-        rpm -ql $rpm
+        rpm -ql $rpm | grep -v ".build-id"
         echo -e
     done
     rm -rf tmp
