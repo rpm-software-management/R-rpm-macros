@@ -20,7 +20,7 @@
     local result = string.gsub(s, p, r)
     print(result)
 }
-%r_gsub() %{?gsub:%gsub %{**}}%{?!gsub:%_r_internal_gsub %{**}}
+%r_gsub() %{?gsub:%gsub %1 %2 %{quote:%3}}%{?!gsub:%_r_internal_gsub %{**}}
 
 # %name with "R-" stripped
 %__R_name %r_gsub %{name} ^R[-] %{quote:}
