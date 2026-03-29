@@ -29,7 +29,7 @@
 %__R_version %{?__R_upstream_version}%{!?__R_upstream_version:%version}
 
 # Version normalization, defines %__R_upstream_version
-%R_rpm_version() %{quote:%global __R_upstream_version %1}%{r_gsub %1 - .}
+%R_rpm_version() %{r_gsub %1 - .}%global __R_upstream_version %1
 
 # Macros for expanding URLs and sources
 %__R_urls() %{lua:
