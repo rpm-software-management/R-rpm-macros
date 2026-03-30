@@ -8,61 +8,36 @@ on:
       - master
 
 jobs:
-  rawhide:
+  test:
     if: ${{ !contains(github.event.head_commit.message, '[ci skip]') }}
     runs-on: ubuntu-latest
+    name: ${{ matrix.image }}:${{ matrix.tag }}
     container:
-      image: registry.fedoraproject.org/fedora:rawhide
+      image: ${{ matrix.repo }}/${{ matrix.image }}:${{ matrix.tag }}
       options: --privileged --cap-add=SYS_ADMIN
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - {image: 'fedora', tag: 'rawhide',  repo: 'registry.fedoraproject.org'}
+        - {image: 'centos', tag: 'stream9',  repo: 'quay.io/centos', args: 'OFFLINE=1' }
+        - {image: 'centos', tag: 'stream10', repo: 'quay.io/centos', args: 'OFFLINE=1' }
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install dependencies
+      - name: Install dependencies (Fedora)
+        if: ${{ matrix.image == 'fedora' }}
         run: dnf install -y make R-core spectool mock
 
-      - name: Run tests
-        run: make test
-
-  epel9:
-    if: ${{ !contains(github.event.head_commit.message, '[ci skip]') }}
-    runs-on: ubuntu-latest
-    container:
-      image: quay.io/centos/centos:stream9
-      options: --privileged --cap-add=SYS_ADMIN
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install dependencies
+      - name: Install dependencies (CentOS)
+        if: ${{ matrix.image == 'centos' }}
         run: |
-          dnf install -y epel-release
           dnf config-manager --set-enabled crb
-          dnf install -y epel-rpm-macros
-          dnf install -y make R-core
+          dnf install -y epel-release
+          dnf install -y epel-rpm-macros make R-core
 
       - name: Run tests
-        run: make test OFFLINE=1
-
-  epel10:
-    if: ${{ !contains(github.event.head_commit.message, '[ci skip]') }}
-    runs-on: ubuntu-latest
-    container:
-      image: quay.io/centos/centos:stream10
-      options: --privileged --cap-add=SYS_ADMIN
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install dependencies
-        run: |
-          dnf install -y epel-release
-          dnf config-manager --set-enabled crb
-          dnf install -y epel-rpm-macros
-	  dnf install -y make R-core
-
-      - name: Run tests
-        run: make test OFFLINE=1
+        run: make test ${{ matrix.args }}
