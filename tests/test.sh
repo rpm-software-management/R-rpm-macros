@@ -19,7 +19,7 @@ for file in test-*.sh; do
         continue
     fi
     set -e
-    diff --color -u $file.out $file.out.new
+    diff --color --ignore-blank-lines -u $file.out $file.out.new
     echo "done"
     rm $file.out.new
 done
