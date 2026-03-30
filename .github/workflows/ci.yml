@@ -37,7 +37,7 @@ jobs:
         run: |
           dnf config-manager --set-enabled crb
           dnf install -y epel-release
-          dnf install -y epel-rpm-macros make R-core
+          dnf install -y epel-rpm-macros diff make R-core
 
       - name: Run tests
         run: make test ${{ matrix.args }}
