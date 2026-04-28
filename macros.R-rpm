@@ -35,9 +35,12 @@ case $(($IS_NOARCH + $LIB_FOUND)) in
 esac
 }
 
+# Detect if R was bootstrapped for the purpose of waiving checks
+%_R_bootstrap_check rpm -q R-core | grep -q bootstrap
+
 %R_buildrequires %{expand:
 echo %{__R_name}/DESCRIPTION | %__R_deps LinkingTo Depends Imports
-echo %{__R_name}/DESCRIPTION | %__R_deps Suggests | grep -E "%{__R_whitelist}" || true
+%_R_bootstrap_check || echo %{__R_name}/DESCRIPTION | %__R_deps Suggests | grep -E "%{__R_whitelist}" || true
 }
 
 %R_install() %{expand:
@@ -55,5 +58,5 @@ rm -f %{__R_name}/src/*.{o,so} %{buildroot}%{_R_libdir}/R.css
 %R_check() %{expand:
 export LANG=C.UTF-8
 export _R_CHECK_FORCE_SUGGESTS_=0
-%__R_cmd check -l %{buildroot}%{_R_libdir} --install=check:install.log --no-manual --ignore-vignettes %{__R_name} %{**}
+%_R_bootstrap_check || %__R_cmd check -l %{buildroot}%{_R_libdir} --install=check:install.log --no-manual --ignore-vignettes %{__R_name} %{**}
 }
